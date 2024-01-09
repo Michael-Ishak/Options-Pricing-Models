@@ -107,6 +107,10 @@ plt.savefig("graph")
 
 # YF real stock options
 
+ticker = yf.ticker("AAPL")
+
+print(ticker.options)
+ticker.option_chain
 
 
 # def get_data(symbol, expiration_date, type == "call"):
@@ -118,20 +122,20 @@ plt.savefig("graph")
 #         option.puts
 
 #     obj = web.YahooOptions(f'{symbol}')
-    
+
 #     df = obj.get_all_data()
 
-    # df.reset_index(inplace=True)
+# df.reset_index(inplace=True)
 
-    # df['mid_price'] = (df.Ask+df.Bid) / 2
-    # df['Time'] = (df.Expiry - dt.datetime.now()).dt.days / 255
+# df['mid_price'] = (df.Ask+df.Bid) / 2
+# df['Time'] = (df.Expiry - dt.datetime.now()).dt.days / 255
 
-    # return df[(df.Bid>0) & (df.Ask >0)]
+# return df[(df.Bid>0) & (df.Ask >0)]
 
 
 # df = get_data('TSLA')
 
-# prices = [] 
+# prices = []
 
 
 # for row in df.itertuples():
@@ -140,8 +144,8 @@ plt.savefig("graph")
 
 
 # df['Price'] = prices
-    
-# df['error'] = df.mid_price - df.Price 
+
+# df['error'] = df.mid_price - df.Price
 
 
 # exp1 = df[(df.Expiry == df.Expiry.unique()[2]) & (df.Type=='call')]
