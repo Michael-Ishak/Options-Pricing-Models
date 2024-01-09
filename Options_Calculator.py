@@ -37,7 +37,7 @@ def geo_paths(S, T, r, q, sigma, steps, N):
     # [steps,N] Matrix of asset paths 
     """
     dt = T/steps
-    #S_{T} = ln(S_{0})+\int_{0}^T(\mu-\frac{\sigma^2}{2})dt+\int_{0}^T \sigma dW(t) ------ this is the european call option ito's process that I derived on paper
+    # S_{T} = ln(S_{0})+\int_{0}^T(\mu-\frac{\sigma^2}{2})dt+\int_{0}^T \sigma dW(t) ------ this is the european call option ito's process that I derived on paper
     ST = np.log(S) +  np.cumsum(((r - q - sigma**2/2)*dt +\
                               sigma*np.sqrt(dt) * \
                               np.random.normal(size=(steps,N))),axis=0)
