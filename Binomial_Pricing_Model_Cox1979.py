@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yfinance as yf
 import datetime as dt
-
+from datetime import date
+from datetime import timedelta
 # To prevent arbitrage, 3C - 100 + 40 = 0 must hold. Therefore, C must be $20.
 # Also determined from binomial theory: if Su = price at upstate, Sd = price at downstate, r = 1 + interest, and p = risk neutral probability of an up move
 # u = 2 * S, d = 0.5 * S. Here, S0 is 1
@@ -107,12 +108,56 @@ plt.savefig("graph")
 
 # YF real stock options
 
-ticker = yf.ticker("AAPL")
+ticker = yf.Ticker("AAPL")
+def expiration_dates(symbol):
+    """
+    Inputs
+    symbol = stock ticker
 
-print(ticker.options)
-ticker.option_chain
+    Outputs
+    Expiration dates for given ticker in a tuple
+    """
+    return symbol.options
+
+def expiration_dates_selector(symbol, idx):
+    """
+    Inputs
+    symbol = stock ticker
+    idx = index of the expiration date desired
+
+    Outputs
+    Expiration date desired for given ticker from the tuple
+    """
+    return expiration_dates(symbol)[idx]
+
+def get_data(symbol, expiration_date, type = "call"):
+    """
+    Inputs
+    symbol = stock ticker
+    expiration_date = date to parse through yfinance to find options
+
+    Outputs
+    Pandas dataframe with options data with 
+    """
+    option = symbol.option_chain(date = expiration_date)
+
+    if type == "call":
+        return option.calls
+    if type == "put":
+        return option.puts
+    return 0
+
+ticker_df = get_data(ticker, expiration_dates_selector(ticker,1))
 
 
+current_price = 'lastPrice'
+strike_price = 'strike'
+time_to_maturity = 'expiry - todays date'
+risk_free_IR = yf.Ticker("^TNX = F")
+yesterday = date.today() - timedelta(days = 1)
+print(yesterday)
+risk_free_IR.history(start= yesterday)
+# print(risk_free_IR.history()['Close'])
 # def get_data(symbol, expiration_date, type == "call"):
 #     option = symbol.option_chain(date = "{}".format(expiration_date))
 
