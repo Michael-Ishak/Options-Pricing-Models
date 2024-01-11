@@ -153,10 +153,27 @@ ticker_df = get_data(ticker, expiration_dates_selector(ticker,1))
 current_price = 'lastPrice'
 strike_price = 'strike'
 time_to_maturity = 'expiry - todays date'
-risk_free_IR = yf.Ticker("^TNX = F")
+risk_free_IR = 4.0150 # Taken from the interest rate for the 10 year Treasury yield
+sigma = 'Implied Volatility'
 yesterday = date.today() - timedelta(days = 1)
-print(yesterday)
-risk_free_IR.history(start= yesterday)
+
+def date_to_T(date):
+    year = int(date.strftime("%Y").strip("'"))
+    month = float(date.strftime("%m").strip("'"))/12
+    return year, month
+
+def exp_date_to_T(date):
+    year = int(date.split("-")[0])
+    month = int(date.split("-")[1])
+    return year, month
+
+expiration_year, expiration_month = exp_date_to_T(expiration_dates_selector(ticker,1))
+yester_year, yester_month = date_to_T(yesterday)
+T = (expiration_year + expiration_month) - (yester_year + yester_month)
+
+print(T)
+# def string_to_float(date):
+
 # print(risk_free_IR.history()['Close'])
 # def get_data(symbol, expiration_date, type == "call"):
 #     option = symbol.option_chain(date = "{}".format(expiration_date))
