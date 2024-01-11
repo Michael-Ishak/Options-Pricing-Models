@@ -5,6 +5,7 @@ import yfinance as yf
 import datetime as dt
 from datetime import date
 from datetime import timedelta
+from decimal import Decimal
 # To prevent arbitrage, 3C - 100 + 40 = 0 must hold. Therefore, C must be $20.
 # Also determined from binomial theory: if Su = price at upstate, Sd = price at downstate, r = 1 + interest, and p = risk neutral probability of an up move
 # u = 2 * S, d = 0.5 * S. Here, S0 is 1
@@ -90,7 +91,7 @@ binom_EU1(S0, K, T, r, sigma, N)
 
 # If we simulate a heads and tails game for the stock option, we can simulate the asset's price between the current date and the expiration, with the limit of dt -> 0
 
-N = 100000
+N = 1000
 sigma = 0.4
 T = 0.5
 K = 105
@@ -148,13 +149,13 @@ def get_data(symbol, expiration_date, type = "call"):
     return 0
 
 ticker_df = get_data(ticker, expiration_dates_selector(ticker,1))
-
-
-current_price = 'lastPrice'
-strike_price = 'strike'
-time_to_maturity = 'expiry - todays date'
-risk_free_IR = 4.0150 # Taken from the interest rate for the 10 year Treasury yield
-sigma = 'Implied Volatility'
+# print(ticker_df)
+N = 10000
+S0 = ticker_df['lastPrice'][0]
+print(S0)
+K = ticker_df['strike'][0]
+r = 4.0150 # Taken from the interest rate for the 10 year Treasury yield
+sigma = ticker_df['impliedVolatility'][0]
 yesterday = date.today() - timedelta(days = 1)
 
 def date_to_T(date):
@@ -172,6 +173,9 @@ yester_year, yester_month = date_to_T(yesterday)
 T = (expiration_year + expiration_month) - (yester_year + yester_month)
 
 print(T)
+
+print(binom_EU1(S0, K, T, r, sigma, N))
+
 # def string_to_float(date):
 
 # print(risk_free_IR.history()['Close'])
